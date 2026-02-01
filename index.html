@@ -2,104 +2,351 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>💖 A Question for You</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>💌 A Question</title>
 
   <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: "Poppins", system-ui, sans-serif;
-      background: linear-gradient(135deg, #ffd6e8, #fff0f6);
+    :root{
+      --pink:#ff3b7b;
+      --pink2:#ff7db3;
+      --bg1:#ffe6f1;
+      --bg2:#fff7fb;
+      --text:#1d1d1f;
+      --muted:#6b7280;
+      --card: rgba(255,255,255,.78);
+      --border: rgba(255,255,255,.55);
+      --shadow: 0 18px 60px rgba(0,0,0,.14);
     }
 
-    .card {
-      background: white;
-      padding: 30px 26px;
-      border-radius: 22px;
-      width: min(420px, 90%);
-      text-align: center;
-      box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      overflow:hidden;
+      background:
+        radial-gradient(800px 600px at 20% 15%, #ffd1e4 0%, transparent 60%),
+        radial-gradient(700px 500px at 80% 20%, #ffd3ef 0%, transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
     }
 
-    h1 {
-      font-size: 26px;
-      margin-bottom: 10px;
+    /* floating hearts background */
+    .hearts{
+      position:fixed; inset:0;
+      pointer-events:none;
+      overflow:hidden;
     }
-
-    p {
-      font-size: 16px;
-      color: #555;
-      margin-bottom: 22px;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-    }
-
-    button {
-      border: none;
-      padding: 12px 22px;
-      border-radius: 16px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: transform 0.1s ease;
-    }
-
-    button:active {
-      transform: scale(0.96);
-    }
-
-    .yes {
-      background: #ff4d8d;
-      color: white;
-      box-shadow: 0 6px 20px rgba(255,77,141,0.4);
-    }
-
-    .no {
-      background: #f2f2f2;
-      color: #333;
-    }
-
-    #answer {
-      margin-top: 22px;
+    .heart{
+      position:absolute;
       font-size: 18px;
-      font-weight: 600;
-      display: none;
-      color: #ff4d8d;
+      opacity:.35;
+      filter: blur(.1px);
+      animation: floatUp linear forwards;
+    }
+    @keyframes floatUp{
+      from{ transform: translateY(110vh) translateX(0) scale(.9) rotate(0deg); opacity:0; }
+      10%{ opacity:.35; }
+      to{ transform: translateY(-20vh) translateX(var(--drift)) scale(1.35) rotate(18deg); opacity:0; }
+    }
+
+    .wrap{
+      min-height:100%;
+      display:grid;
+      place-items:center;
+      padding: clamp(16px, 4vw, 28px);
+    }
+
+    .card{
+      width: min(520px, 92vw);
+      background: var(--card);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 4.6vw, 28px);
+      position:relative;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.65);
+      border: 1px solid rgba(0,0,0,.05);
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    h1{
+      margin: 0 0 10px;
+      font-size: clamp(22px, 5.6vw, 30px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+    p{
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: clamp(14px, 3.8vw, 16px);
+      line-height: 1.45;
+    }
+
+    .btnRow{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top: 8px;
+    }
+
+    button{
+      border:0;
+      border-radius: 18px;
+      padding: 14px 18px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor:pointer;
+      min-width: 140px;
+      touch-action: manipulation;
+      user-select:none;
+      box-shadow: 0 10px 22px rgba(0,0,0,.10);
+      transform: translateZ(0);
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    }
+    button:active{ transform: scale(.98); }
+
+    .yes{
+      color:#fff;
+      background: linear-gradient(135deg, var(--pink), var(--pink2));
+    }
+    .yes:hover{ filter: brightness(1.03); }
+
+    .no{
+      background: rgba(255,255,255,.85);
+      color:#111827;
+      border: 1px solid rgba(0,0,0,.06);
+      position:relative;
+    }
+
+    .tip{
+      margin-top: 14px;
+      font-size: 13px;
+      color: rgba(107,114,128,.92);
+      text-align:center;
+    }
+
+    .result{
+      margin-top: 18px;
+      border-radius: 20px;
+      padding: 14px 14px;
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(0,0,0,.05);
+      display:none;
+      animation: pop .22s ease;
+    }
+    .result h2{
+      margin:0 0 6px;
+      font-size: 18px;
+    }
+    .result .sub{
+      margin:0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @keyframes pop{
+      from{ transform: scale(.96); opacity:0; }
+      to{ transform: scale(1); opacity:1; }
+    }
+
+    /* confetti */
+    canvas#confetti{
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    /* small footer */
+    .footer{
+      margin-top: 14px;
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      font-size:12px;
+      color: rgba(107,114,128,.85);
+    }
+    .pill{
+      background: rgba(255,255,255,.6);
+      border: 1px solid rgba(0,0,0,.05);
+      padding: 6px 10px;
+      border-radius: 999px;
     }
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <h1>Will you be my Valentine? 💘</h1>
-    <p>I have only one question… and one correct answer 🥰</p>
+  <div class="hearts" id="hearts"></div>
+  <canvas id="confetti"></canvas>
 
-    <div class="buttons">
-      <button class="yes" onclick="yes()">Yes 💖</button>
-      <button class="no" id="noBtn">No 🙄</button>
+  <div class="wrap">
+    <div class="card" role="dialog" aria-label="Valentine question">
+      <div class="badge">💗 Made with love • Tap friendly</div>
+
+      <h1>Will you be my Valentine? 💘</h1>
+      <p>No pressure… but there *is* a correct answer 😌</p>
+
+      <div class="btnRow">
+        <button class="yes" id="yesBtn">Yes 💖</button>
+        <button class="no" id="noBtn">No 🙄</button>
+      </div>
+
+      <div class="result" id="result">
+        <h2>YAAAY 💞</h2>
+        <p class="sub">Okayyy you just made my whole day 🥰</p>
+      </div>
+
+      <div class="tip">Tip: try tapping “No”… if you can 😏</div>
+
+      <div class="footer">
+        <span class="pill">📱 Optimized for phone</span>
+        <span class="pill">✨ Smooth animations</span>
+        <span class="pill">💌 Romantic mode</span>
+      </div>
     </div>
-
-    <div id="answer">YAY 💞 I knew it!</div>
   </div>
 
   <script>
-    function yes() {
-      document.getElementById("answer").style.display = "block";
+    // ===== floating hearts background =====
+    const heartsWrap = document.getElementById("hearts");
+    const heartEmojis = ["💗","💖","💘","💕","💞","❤️"];
+    function spawnHeart(){
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
+      const left = Math.random()*100;
+      const size = 14 + Math.random()*18;
+      const dur = 6 + Math.random()*7;
+      const drift = (Math.random()*120 - 60) + "px";
+      h.style.left = left + "vw";
+      h.style.fontSize = size + "px";
+      h.style.animationDuration = dur + "s";
+      h.style.setProperty("--drift", drift);
+      heartsWrap.appendChild(h);
+      setTimeout(() => h.remove(), dur*1000 + 200);
+    }
+    // spawn a few immediately, then keep going
+    for(let i=0;i<10;i++) setTimeout(spawnHeart, i*250);
+    setInterval(spawnHeart, 550);
+
+    // ===== main buttons =====
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn  = document.getElementById("noBtn");
+    const result = document.getElementById("result");
+
+    yesBtn.addEventListener("click", () => {
+      result.style.display = "block";
+      launchConfetti(1300);
+      // Optional: after YES, you can change the message or redirect:
+      // setTimeout(()=> window.location.href="https://example.com", 1200);
+    });
+
+    // Make "No" run away on touch/hover, but not impossible
+    function dodge(){
+      const maxX = 110;  // keep it near center on phone
+      const maxY = 90;
+      const x = Math.random() * (maxX*2) - maxX;
+      const y = Math.random() * (maxY*2) - maxY;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
     }
 
-    const noBtn = document.getElementById("noBtn");
-    noBtn.addEventListener("mouseover", () => {
-      const x = Math.random() * 200 - 100;
-      const y = Math.random() * 150 - 75;
-      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    // Works on desktop + phone
+    noBtn.addEventListener("mouseenter", dodge);
+    noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); dodge(); }, {passive:false});
+
+    noBtn.addEventListener("click", () => {
+      // if they somehow click it
+      result.style.display = "block";
+      result.querySelector("h2").textContent = "I’ll count that as YES 😌💞";
+      result.querySelector(".sub").textContent = "Nice try though 😏";
+      launchConfetti(900);
     });
+
+    // ===== lightweight confetti (canvas) =====
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    let W, H;
+    function resize(){
+      W = canvas.width  = window.innerWidth  * devicePixelRatio;
+      H = canvas.height = window.innerHeight * devicePixelRatio;
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function launchConfetti(ms=1200){
+      const pieces = [];
+      const colors = ["#ff3b7b","#ff7db3","#ffd1e4","#ffffff","#ffb3d1"];
+      const count = 140;
+
+      for(let i=0;i<count;i++){
+        pieces.push({
+          x: (W/2) + (Math.random()*240 - 120) * devicePixelRatio,
+          y: (H/2) + (Math.random()*80 - 40) * devicePixelRatio,
+          vx: (Math.random()*10 - 5) * devicePixelRatio,
+          vy: (Math.random()*-12 - 6) * devicePixelRatio,
+          g: (0.35 + Math.random()*0.25) * devicePixelRatio,
+          s: (4 + Math.random()*6) * devicePixelRatio,
+          r: Math.random()*Math.PI,
+          vr: (Math.random()*0.2 - 0.1),
+          c: colors[Math.floor(Math.random()*colors.length)],
+          life: ms + Math.random()*400
+        });
+      }
+
+      const start = performance.now();
+      function frame(t){
+        const dt = Math.min(32, t - (frame.last || t));
+        frame.last = t;
+
+        ctx.clearRect(0,0,W,H);
+
+        for(const p of pieces){
+          p.life -= dt;
+          p.vy += p.g;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.r += p.vr;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.r);
+          ctx.fillStyle = p.c;
+          ctx.fillRect(-p.s/2, -p.s/2, p.s, p.s*0.6);
+          ctx.restore();
+        }
+
+        // remove dead
+        for(let i=pieces.length-1;i>=0;i--){
+          if(pieces[i].life <= 0 || pieces[i].y > H + 60) pieces.splice(i,1);
+        }
+
+        if (performance.now() - start < ms || pieces.length){
+          requestAnimationFrame(frame);
+        } else {
+          ctx.clearRect(0,0,W,H);
+        }
+      }
+      requestAnimationFrame(frame);
+    }
   </script>
 </body>
 </html>
